@@ -10,9 +10,9 @@ let toUpdateArray = [];
 const Todo = () => {
   const [Inputs, setInputs] = useState({
     title: "",
-    body: "",
+    description: "",
   });
-  const [Array, setArray] = useState([]);
+  const [Array, setArray] = useState();
 
   const show = () => {
     document.getElementById("textarea").style.display = "block";
@@ -22,43 +22,25 @@ const Todo = () => {
     setInputs({ ...Inputs, [name]: value });
   };
   const submit = async () => {
-    if (Inputs.title === "" || Inputs.body === "") {
-      toast.error("Title Or Body Can't Be Empty");
+    if (Inputs.title === "" || Inputs.description === "") {
+      toast.error("Title Or description Can't Be Empty");
     } else {
-      if (id) {
         await axios
-          .post(`${window.location.origin}/api/v2/addTask`, {
+          .post(`${process.env.REACT_APP_API_URL}todos`, {
             title: Inputs.title,
-            body: Inputs.body,
+            description: Inputs.description,
             id: id,
           })
           .then((response) => {
             console.log(response);
           });
-        setInputs({ title: "", body: "" });
+        setInputs({ title: "", description: "" });
         toast.success("Your Task Is Added");
-      } else {
-        setArray([...Array, Inputs]);
-        setInputs({ title: "", body: "" });
-        toast.success("Your Task Is Added");
-        toast.error("Your Task Is Not Saved ! Please SignUp");
-      }
+     
     }
   };
 
-  const del = async (Cardid) => {
-    if (id) {
-      await axios
-        .delete(`${window.location.origin}/api/v2/deleteTask/${Cardid}`, {
-          data: { id: id },
-        })
-        .then(() => {
-          toast.success("Your Task Is Deleted");
-        });
-    } else {
-      toast.error("Please SignUp First");
-    }
-  };
+
 
   const dis = (value) => {
     document.getElementById("todo-update").style.display = value;
@@ -67,16 +49,16 @@ const Todo = () => {
     toUpdateArray = Array[value];
   };
   useEffect(() => {
-    if (id) {
       const fetch = async () => {
         await axios
-          .get(`${window.location.origin}/api/v2/getTasks/${id}`)
+          .get(`${process.env.REACT_APP_API_URL}todos`)
           .then((response) => {
-            setArray(response.data.list);
+           
+            setArray(response.data);
           });
       };
       fetch();
-    }
+    
   }, [submit]);
 
   return (
@@ -98,9 +80,9 @@ const Todo = () => {
               id="textarea"
               type="text"
               placeholder="BODY"
-              name="body"
+              name="description"
               className=" p-2 todo-inputs"
-              value={Inputs.body}
+              value={Inputs.description}
               onChange={change}
             />
           </div>
@@ -121,9 +103,8 @@ const Todo = () => {
                   >
                     <TodoCards
                       title={item.title}
-                      body={item.body}
+                      description={item.description}
                       id={item._id}
-                      delid={del}
                       display={dis}
                       updateId={index}
                       toBeUpdate={update}

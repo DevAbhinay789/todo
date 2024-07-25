@@ -9,6 +9,7 @@ import SignIn from "./components/signup/SignIn";
 import Todo from "./components/todo/Todo";
 import { useDispatch } from "react-redux";
 import { authActions } from "./store";
+import Verify from "./components/signup/verify";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -28,6 +29,8 @@ const App = () => {
           <Route path="/todo" element={<Todo />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<SignIn />} />
+           <Route path="/verify" element={<Verify />} />
+          
         </Routes>
       </Router>
 

@@ -18,7 +18,7 @@ const Signup = () => {
   const submit = async (e) => {
     e.preventDefault();
     await axios
-      .post(`${window.location.origin}/api/v1/register`, Inputs)
+      .post(`${process.env.REACT_APP_API_URL}api/auth/register`, Inputs)
       .then((response) => {
         if (response.data.message === "User Already Exists") {
           alert(response.data.message);
@@ -29,7 +29,7 @@ const Signup = () => {
             username: "",
             password: "",
           });
-          history("/signin");
+          history("/verify");
         }
       });
   };

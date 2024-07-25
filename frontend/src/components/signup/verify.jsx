@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store";
 
-const SignIn = () => {
-  const dispatch = useDispatch();
+const Verify = () => {
   const history = useNavigate();
   const [Inputs, setInputs] = useState({
     email: "",
-    password: "",
+    otp: "",
   });
   const change = (e) => {
     const { name, value } = e.target;
@@ -22,11 +21,11 @@ const SignIn = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}api/auth/login`,
+        `${process.env.REACT_APP_API_URL}api/auth/verify`,
         Inputs
       );
       if (response.data) {
-        history("/todo");
+        history("/signin");
       } else {
         // Handle the case where the response does not contain the expected data
         console.error("Response data or _id not found in the response.");
@@ -58,15 +57,15 @@ const SignIn = () => {
 
                 <input
                   className="p-2 my-3 input-signup"
-                  type="password"
-                  name="password"
-                  placeholder="Enter Your Password"
+                  type="text"
+                  name="otp"
+                  placeholder="Enter Your OTP"
                   value={Inputs.password}
                   onChange={change}
                 />
 
                 <button className="btn-signup p-2" onClick={submit}>
-                  Sign In
+                 Verify Email
                 </button>
               </div>
             </div>
@@ -77,4 +76,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Verify;
